@@ -93,3 +93,9 @@ Desktop.ini
 *.temp
 temp/
 tmp/
+
+# Documentation & Assignment Files
+*.png
+*.JPG
+*.pdf
+*.docx
