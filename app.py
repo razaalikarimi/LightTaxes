@@ -158,6 +158,16 @@ with tab_business:
             
         st.metric("Estimated Net Profit", f"${biz_gross - biz_expenses:,.2f}")
 
+    st.divider()
+    st.subheader("📚 Other Adjustments")
+    col1, col2 = st.columns(2)
+    with col1:
+        is_educator = st.checkbox("I am an eligible educator", value=False)
+        educator_paid = st.number_input("Educator expenses paid ($)", 0.0, 10000.0, 0.0)
+    with col2:
+        sli_paid = st.number_input("Student loan interest paid ($)", 0.0, 20000.0, 0.0)
+
+
 # Prepare Input JSON logic
 def prepare_input_data():
     data = {
@@ -165,6 +175,9 @@ def prepare_input_data():
         "taxpayer_name": info_name,
         "ssn": info_ssn,
         "age": info_age,
+        "is_taxpayer_educator": is_educator,
+        "educator_expenses_paid": educator_paid,
+        "student_loan_interest_paid": sli_paid,
         "w2": [{
             "wages": w2_wages,
             "federal_withholding": w2_withheld
