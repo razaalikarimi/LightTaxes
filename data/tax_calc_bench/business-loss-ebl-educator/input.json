@@ -1,0 +1,23 @@
+{
+  "filing_status": "single",
+  "taxpayer_name": "Educator Loss Pro",
+  "ssn": "999-00-1234",
+  "age": 40,
+  "is_taxpayer_educator": true,
+  "educator_expenses_paid": 500.0,
+  "student_loan_interest_paid": 3000.0,
+  "w2": [
+    {
+      "employer": "Public School",
+      "wages": 60000,
+      "federal_withholding": 6000
+    }
+  ],
+  "business_income": {
+    "business_name": "Failed Startup",
+    "gross_receipts": 0,
+    "advertising": 400000
+  },
+  "income_1099_int": [],
+  "dependents": []
+}

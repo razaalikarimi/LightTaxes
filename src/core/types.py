@@ -82,11 +82,13 @@ class TaxpayerInfo(BaseModel):
     dob: Optional[str] = None
     age: Optional[int] = None
     blind: bool = False
+    is_eligible_educator: bool = False  # Added for Schedule 1 adjustments
     spouse_name: Optional[str] = None
     spouse_ssn: Optional[str] = None
     spouse_dob: Optional[str] = None
     spouse_age: Optional[int] = None
     spouse_blind: bool = False
+    spouse_eligible_educator: bool = False  # Added for Schedule 1 adjustments
 
 
 # ============================================================================
@@ -102,6 +104,9 @@ class TaxInputs(BaseModel):
     income_1099_int: List[Form1099INT] = Field(default_factory=list)
     income_1099_div: List[Form1099DIV] = Field(default_factory=list)
     business_income: Optional[BusinessIncome] = None
+    student_loan_interest_paid: float = 0.0  # Added for Schedule 1 adjustments
+    educator_expenses_paid: float = 0.0  # Added for Schedule 1 adjustments
+    spouse_educator_expenses_paid: float = 0.0  # Added for Schedule 1 adjustments
     
 
 class ScheduleBInputs(BaseModel):

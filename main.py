@@ -123,16 +123,55 @@ class TaxReturnProcessor:
         # Prepare Form 1040 inputs
         
         # Calculate Adjustments (Schedule 1)
-        # In a full impl, this would be a Schedule 1 Agent.
-        # Here we aggregate SE Tax Deduction.
+        from src.tools.adjustments import (
+            calculate_educator_expense, 
+            calculate_student_loan_interest,
+            calculate_excess_business_loss
+        )
+        
         total_adjustments = 0.0
         se_tax = 0.0
+        additional_income = 0.0
         
+        # 1. Business Income/Loss
+        net_biz = schedule_c_outputs.net_profit_loss if schedule_c_outputs else 0.0
+        additional_income += net_biz
+        
+        # Handle Excess Business Loss (Form 461) - Addition to Income
+        if net_biz < 0:
+            ebl_addback = calculate_excess_business_loss(abs(net_biz), tax_inputs.filing_status)
+            if ebl_addback > 0:
+                self._log(f"  Form 461: Excess Business Loss detected. Adding back ${ebl_addback:,.2f}")
+                additional_income += ebl_addback # Disallowing loss = adding back
+                
+        # 2. SE Tax Deduction
         if schedule_se_outputs:
-            # Schedule SE Deduction (Line 13) flows to Schedule 1 -> 1040 Line 10
             total_adjustments += schedule_se_outputs.deduction
-            # Schedule SE Tax (Line 12) flows to Schedule 2 -> 1040 Line 23
             se_tax = schedule_se_outputs.self_employment_tax
+            
+        # 3. Educator Expenses
+        educator_deduction = calculate_educator_expense(
+            tax_inputs.educator_expenses_paid,
+            tax_inputs.taxpayer.is_eligible_educator,
+            tax_inputs.spouse_educator_expenses_paid,
+            tax_inputs.taxpayer.spouse_eligible_educator,
+            tax_inputs.filing_status
+        )
+        if educator_deduction > 0:
+            self._log(f"  Educator Expense Deduction: ${educator_deduction:,.2f}")
+            total_adjustments += educator_deduction
+            
+        # 4. Student Loan Interest (SLI)
+        # Temporary MAGI calculation (approximate for deduction lookup)
+        temp_agi = total_wages + total_interest + total_dividends + additional_income - (total_adjustments)
+        sli_deduction = calculate_student_loan_interest(
+            tax_inputs.student_loan_interest_paid,
+            temp_agi,
+            tax_inputs.filing_status
+        )
+        if sli_deduction > 0:
+            self._log(f"  Student Loan Interest Deduction: ${sli_deduction:,.2f}")
+            total_adjustments += sli_deduction
             
         form_1040_inputs = Form1040Inputs(
             filing_status=tax_inputs.filing_status,
@@ -141,7 +180,7 @@ class TaxReturnProcessor:
             wages=total_wages,
             interest=total_interest,
             dividends=total_dividends,
-            schedule_1_additional_income=schedule_c_outputs.net_profit_loss if schedule_c_outputs else 0, # Business Income flows to Sch 1 -> 1040 Line 8
+            schedule_1_additional_income=additional_income,
             schedule_1_adjustments=total_adjustments
         )
         
@@ -291,13 +330,25 @@ class TaxReturnProcessor:
                 other_expenses=biz_data.get("other_expenses", {})
             )
         
+        # Standard Educator Expense & SLI extraction from input
+        educator_expenses_paid = data.get("educator_expenses_paid", 0.0)
+        spouse_educator_expenses_paid = data.get("spouse_educator_expenses_paid", 0.0)
+        student_loan_interest_paid = data.get("student_loan_interest_paid", 0.0)
+        
+        # Check flags for eligibility
+        taxpayer.is_eligible_educator = data.get("is_taxpayer_educator", False)
+        taxpayer.spouse_eligible_educator = data.get("is_spouse_educator", False)
+        
         return TaxInputs(
             filing_status=filing_status,
             taxpayer=taxpayer,
             dependents=dependents,
             w2=w2s,
             income_1099_int=interest_forms,
-            business_income=business_income
+            business_income=business_income,
+            educator_expenses_paid=educator_expenses_paid,
+            spouse_educator_expenses_paid=spouse_educator_expenses_paid,
+            student_loan_interest_paid=student_loan_interest_paid
         )
 
 
