@@ -1,0 +1,18 @@
+{
+  "filing_status": "single",
+  "taxpayer_name": "John Doe",
+  "ssn": "123-45-6789",
+  "age": 35,
+  "w2": [
+    {
+      "employer": "Tech Corp",
+      "wages": 50000,
+      "federal_withholding": 5000,
+      "social_security_wages": 50000,
+      "medicare_wages": 50000
+    }
+  ],
+  "income_1099_int": [],
+  "income_1099_div": [],
+  "dependents": []
+}

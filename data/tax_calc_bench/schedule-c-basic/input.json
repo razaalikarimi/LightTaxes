@@ -1,0 +1,21 @@
+{
+  "filing_status": "single",
+  "taxpayer_name": "Freelance Coder",
+  "ssn": "555-00-1111",
+  "age": 30,
+  "w2": [],
+  "business_income": {
+    "business_name": "Code Studio LLC",
+    "gross_receipts": 80000,
+    "advertising": 5000,
+    "office_expense": 5000,
+    "supplies": 2000,
+    "utilities": 3000,
+    "legal_professional": 1000,
+    "other_expenses": {
+      "software": 4000
+    }
+  },
+  "income_1099_int": [],
+  "dependents": []
+}

@@ -1,0 +1,23 @@
+{
+  "filing_status": "married_filing_jointly",
+  "taxpayer_name": "John Smith",
+  "spouse_name": "Jane Smith",
+  "ssn": "123-45-6789",
+  "spouse_ssn": "987-65-4321",
+  "age": 40,
+  "spouse_age": 38,
+  "w2": [
+    {
+      "employer": "Company A",
+      "wages": 60000,
+      "federal_withholding": 6000
+    },
+    {
+      "employer": "Company B",
+      "wages": 45000,
+      "federal_withholding": 4500
+    }
+  ],
+  "income_1099_int": [],
+  "dependents": []
+}

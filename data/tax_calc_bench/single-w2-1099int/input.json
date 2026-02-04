@@ -1,0 +1,31 @@
+{
+  "filing_status": "single",
+  "taxpayer_name": "Jane Investor",
+  "ssn": "234-56-7890",
+  "age": 45,
+  "w2": [
+    {
+      "employer": "Finance Corp",
+      "wages": 75000,
+      "federal_withholding": 8500
+    }
+  ],
+  "income_1099_int": [
+    {
+      "payer": "Chase Bank",
+      "interest_income": 450.50
+    },
+    {
+      "payer": "Bank of America",
+      "interest_income": 225.75
+    }
+  ],
+  "income_1099_div": [
+    {
+      "payer": "Vanguard",
+      "ordinary_dividends": 800.00,
+      "qualified_dividends": 800.00
+    }
+  ],
+  "dependents": []
+}
